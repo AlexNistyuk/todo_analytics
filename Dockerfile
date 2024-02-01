@@ -1,6 +1,6 @@
 FROM python:3.11.7-slim-bookworm
 
-RUN mkdir /fastapi_todo_auth
+RUN mkdir /fastapi_todo_analytics
 WORKDIR /fastapi_todo_auth
 
 RUN pip3 install poetry
