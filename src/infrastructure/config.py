@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     aws_access_key_id: str
     aws_secret_access_key: str
     aws_region: str
+    user_info_url: str
 
     model_config = SettingsConfigDict(env_file=ENV_FILE_PATH, extra=Extra.allow)
 
