@@ -17,11 +17,14 @@ from infrastructure.repositories.actions import ActionRepository
 class ActionUseCase(IUseCase):
     repository = ActionRepository()
 
-    async def create(self, data: dict) -> None:
+    async def create(self, data: dict, user: dict = None) -> None:
         data["id"] = str(uuid.uuid4())
-        data["user_id"] = 2
+
+        if user is None:
+            data["user_id"] = user.get("id")
+
         data["created_at"] = int(datetime.datetime.utcnow().timestamp())
-        data["action"] = data["action"].value
+        data["action_at"] = data["action_at"].value
         data["action_type"] = data["action_type"].value
 
         try:

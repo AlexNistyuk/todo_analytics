@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     aws_secret_access_key: str
     aws_region: str
     user_info_url: str
+    kafka_url: str
+    kafka_topic: str
+    consumer_group: str
 
     model_config = SettingsConfigDict(env_file=ENV_FILE_PATH, extra=Extra.allow)
 

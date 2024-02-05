@@ -3,7 +3,7 @@ import enum
 from pydantic import BaseModel
 
 
-class Action(enum.Enum):
+class ActionAt(enum.Enum):
     sheet = "sheet"
     task = "task"
 
@@ -15,7 +15,7 @@ class ActionType(enum.Enum):
 
 
 class ActionCreate(BaseModel):
-    action: Action
+    action_at: ActionAt
     name: str
     action_type: ActionType
 

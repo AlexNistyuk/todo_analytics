@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from starlette.requests import Request
 from starlette.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from application.use_cases.actions import ActionUseCase
@@ -13,8 +14,8 @@ async def get_all_actions():
 
 
 @router.post("/", status_code=HTTP_204_NO_CONTENT)
-async def create_action(new_action: ActionCreate):
-    return await ActionUseCase().create(new_action.model_dump())
+async def create_action(request: Request, new_action: ActionCreate):
+    return await ActionUseCase().create(new_action.model_dump(), request.state.user)
 
 
 @router.get("/{item_id}", response_model=ActionRetrieve, status_code=HTTP_200_OK)
