@@ -34,7 +34,9 @@ class ActionUseCase(IUseCase):
 
     async def get_all(self) -> list[dict]:
         try:
-            return await self.repository.get_all()["Items"]
+            result = await self.repository.get_all()
+
+            return result["Items"]
         except botocore.exceptions.ClientError:
             raise ActionRetrieveError
 

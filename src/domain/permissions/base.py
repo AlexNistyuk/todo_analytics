@@ -1,16 +1,16 @@
 from starlette.requests import Request
 
 from domain.exceptions.user import UserPermissionDenied
-from infrastructure.permissions.interfaces import IPermission
+from domain.permissions.interfaces import IPermission
 
 
 class BasePermission(IPermission):
     """Base permission"""
 
     async def __call__(self, request: Request):
-        user = request.state.user
+        self.user = request.state.user
 
-        user_role = user.get("role")
+        user_role = self.user.get("role")
         if not user_role:
             raise UserPermissionDenied
 
@@ -18,3 +18,11 @@ class BasePermission(IPermission):
         if not result:
             raise UserPermissionDenied
         return self
+
+    async def check_object_permission(self, user_id: int):
+        result = await self.has_object_permission(user_id)
+        if not result:
+            raise UserPermissionDenied
+
+    async def has_object_permission(self, *args, **kwargs):
+        return True
