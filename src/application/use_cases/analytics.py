@@ -4,6 +4,7 @@ import botocore.exceptions
 from boto3.dynamodb.conditions import Attr
 
 from domain.exceptions.actions import ActionRetrieveError
+from domain.utils.action_types import ActionType
 from domain.utils.period import Period, days_period_map
 from infrastructure.repositories.actions import ActionRepository
 
@@ -46,45 +47,15 @@ class AnalyticsUseCase:
         except botocore.exceptions.ClientError:
             raise ActionRetrieveError
 
-    async def get_done_tasks(self, user_id: int, period: Period) -> dict:
+    async def get_action_tasks(
+        self, user_id: int, action_type: ActionType, period: Period
+    ) -> dict:
         try:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
                 and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq("done")
-                and Attr("action_at").eq("task")
-            )
-
-            result = await self.repository.get_by_filters(filters)
-
-            return self.__get_result(result)
-        except botocore.exceptions.ClientError:
-            raise ActionRetrieveError
-
-    async def get_created_tasks(self, user_id: int, period: Period) -> dict:
-        try:
-            date = self.__get_date(period)
-            filters = (
-                Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq("create")
-                and Attr("action_at").eq("task")
-            )
-
-            result = await self.repository.get_by_filters(filters)
-
-            return self.__get_result(result)
-        except botocore.exceptions.ClientError:
-            raise ActionRetrieveError
-
-    async def get_retrieved_tasks(self, user_id: int, period: Period) -> dict:
-        try:
-            date = self.__get_date(period)
-            filters = (
-                Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq("retrieve")
+                and Attr("action_type").eq(action_type.value)
                 and Attr("action_at").eq("task")
             )
 
@@ -109,29 +80,15 @@ class AnalyticsUseCase:
         except botocore.exceptions.ClientError:
             raise ActionRetrieveError
 
-    async def get_created_sheets(self, user_id: int, period: Period) -> dict:
+    async def get_action_sheets(
+        self, user_id: int, action_type: ActionType, period: Period
+    ) -> dict:
         try:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
                 and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq("create")
-                and Attr("action_at").eq("sheet")
-            )
-
-            result = await self.repository.get_by_filters(filters)
-
-            return self.__get_result(result)
-        except botocore.exceptions.ClientError:
-            raise ActionRetrieveError
-
-    async def get_retrieved_sheets(self, user_id: int, period: Period) -> dict:
-        try:
-            date = self.__get_date(period)
-            filters = (
-                Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq("retrieve")
+                and Attr("action_type").eq(action_type.value)
                 and Attr("action_at").eq("sheet")
             )
 

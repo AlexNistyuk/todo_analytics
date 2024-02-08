@@ -1,17 +1,7 @@
-import enum
-
 from pydantic import BaseModel
 
-
-class ActionAt(enum.Enum):
-    sheet = "sheet"
-    task = "task"
-
-
-class ActionType(enum.Enum):
-    create = "create"
-    retrieve = "retrieve"
-    done = "done"
+from domain.utils.action_at import ActionAt
+from domain.utils.action_types import ActionType
 
 
 class ActionCreate(BaseModel):

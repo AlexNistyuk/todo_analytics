@@ -20,7 +20,7 @@ class ActionUseCase(IUseCase):
     async def create(self, data: dict, user: dict = None) -> None:
         data["id"] = str(uuid.uuid4())
 
-        if user is None:
+        if user is not None:
             data["user_id"] = user.get("id")
 
         data["created_at"] = int(datetime.datetime.utcnow().timestamp())
