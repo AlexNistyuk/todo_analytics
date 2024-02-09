@@ -17,7 +17,7 @@ from infrastructure.repositories.actions import ActionRepository
 class ActionUseCase(IUseCase):
     repository = ActionRepository()
 
-    async def create(self, data: dict, user: dict = None) -> None:
+    async def create(self, data: dict, user=None) -> None:
         data["id"] = str(uuid.uuid4())
 
         if user is not None:

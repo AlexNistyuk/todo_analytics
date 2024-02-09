@@ -18,6 +18,7 @@ pytest-asyncio = "^0.23.4"
 pytest-mock = "^3.12.0"
 faker = "^23.1.0"
 schemathesis = "^3.25.0"
+mypy = "^1.8.0"
 
 [build-system]
 requires = ["poetry-core"]

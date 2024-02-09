@@ -39,3 +39,11 @@ def mock_action_repo(mocker):
     mocker.patch(f"{repo_path}.get_by_id", return_value=action)
     mocker.patch(f"{repo_path}.get_by_filters", return_value=action)
     mocker.patch(f"{repo_path}.delete_by_id", return_value=None)
+
+
+@pytest.fixture()
+def mock_db_manager(mocker):
+    manager_path = "infrastructure.managers.database.DatabaseManager"
+
+    mocker.patch(f"{manager_path}.connect", return_value=None)
+    mocker.patch(f"{manager_path}.close", return_value=None)

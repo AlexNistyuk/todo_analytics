@@ -11,12 +11,12 @@ from presentation.routers import router as api_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_manager = await DatabaseManager.connect()
-    await create_actions_table(db_manager.client)
+    await DatabaseManager.connect()
+    await create_actions_table(DatabaseManager.client)
 
     yield
 
-    await db_manager.close()
+    await DatabaseManager.close()
 
 
 app = FastAPI(lifespan=lifespan)

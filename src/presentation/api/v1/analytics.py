@@ -1,5 +1,10 @@
 from fastapi import APIRouter, Depends
-from starlette.status import HTTP_200_OK
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
+    HTTP_403_FORBIDDEN,
+    HTTP_503_SERVICE_UNAVAILABLE,
+)
 
 from application.use_cases.analytics import AnalyticsUseCase
 from domain.entities.analytics import AnalyticsRetrieve
@@ -10,7 +15,16 @@ from domain.utils.period import Period
 router = APIRouter()
 
 
-@router.get("/{user_id}", response_model=AnalyticsRetrieve, status_code=HTTP_200_OK)
+@router.get(
+    "/{user_id}",
+    response_model=AnalyticsRetrieve,
+    status_code=HTTP_200_OK,
+    responses={
+        HTTP_400_BAD_REQUEST: {},
+        HTTP_503_SERVICE_UNAVAILABLE: {},
+        HTTP_403_FORBIDDEN: {},
+    },
+)
 async def get_all_user_actions(
     user_id: int, period: Period, permission=Depends(IsAdminOrIsOwner())
 ):
@@ -20,7 +34,14 @@ async def get_all_user_actions(
 
 
 @router.get(
-    "/{user_id}/tasks", response_model=AnalyticsRetrieve, status_code=HTTP_200_OK
+    "/{user_id}/tasks",
+    response_model=AnalyticsRetrieve,
+    status_code=HTTP_200_OK,
+    responses={
+        HTTP_400_BAD_REQUEST: {},
+        HTTP_503_SERVICE_UNAVAILABLE: {},
+        HTTP_403_FORBIDDEN: {},
+    },
 )
 async def get_action_user_tasks(
     user_id: int,
@@ -36,7 +57,14 @@ async def get_action_user_tasks(
 
 
 @router.get(
-    "/{user_id}/sheets", response_model=AnalyticsRetrieve, status_code=HTTP_200_OK
+    "/{user_id}/sheets",
+    response_model=AnalyticsRetrieve,
+    status_code=HTTP_200_OK,
+    responses={
+        HTTP_400_BAD_REQUEST: {},
+        HTTP_503_SERVICE_UNAVAILABLE: {},
+        HTTP_403_FORBIDDEN: {},
+    },
 )
 async def get_all_user_sheets(
     user_id: int,
