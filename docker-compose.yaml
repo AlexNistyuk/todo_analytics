@@ -10,6 +10,11 @@ services:
     entrypoint:
       - ./entrypoints/fastapi.sh
 
+  kafka_consumer_app:
+    build: .
+    entrypoint:
+      - ./entrypoints/kafka-consumer.sh
+
   localstack_app:
     image: localstack/localstack
     container_name: ${DB_HOST}
@@ -18,3 +23,8 @@ services:
     environment:
       - SERVICES=dynamodb
       - DEBUG=0
+
+networks:
+  default:
+    name: ${DEFAULT_NETWORK}
+    external: true
