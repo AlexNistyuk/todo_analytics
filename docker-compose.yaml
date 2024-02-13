@@ -24,6 +24,17 @@ services:
       - SERVICES=dynamodb
       - DEBUG=0
 
+  nginx_app:
+    image: nginx:latest
+    ports:
+      - ${NGINX_PORT}:${NGINX_LISTEN_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - fastapi_todo_analytics_app
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+
 networks:
   default:
     name: ${DEFAULT_NETWORK}
