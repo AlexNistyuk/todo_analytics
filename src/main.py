@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 
+from application.dependencies import Container
 from infrastructure.managers.database import DatabaseManager
-from infrastructure.middlewares.user import UserAuthMiddleware
+from infrastructure.middlewares.auth_middleware.init import init_auth_middleware
 from migrations.actions import create_actions_table
 from presentation.routers import router as api_router
 
@@ -14,6 +14,14 @@ async def lifespan(app: FastAPI):
     await DatabaseManager.connect()
     await create_actions_table(DatabaseManager.client)
 
+    container = Container()
+    container.wire(
+        modules=[
+            "presentation.api.v1.actions",
+            "presentation.api.v1.analytics",
+        ]
+    )
+
     yield
 
     await DatabaseManager.close()
@@ -21,10 +29,5 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(api_router)
-app.add_middleware(UserAuthMiddleware)
 
-
-# TODO delete in production
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8002)
+init_auth_middleware(app)

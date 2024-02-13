@@ -1,7 +1,6 @@
 import faker
 import pytest
 
-from tests.conftest import client
 from tests.factories import ActionFactory
 
 
@@ -13,7 +12,7 @@ class TestSheet:
         self.fake = faker.Faker()
 
     @pytest.mark.asyncio
-    async def test_list_ok(self, mock_admin_permission, mock_action_repo):
+    async def test_list_ok(self, client, mock_admin_permission, mock_action_repo):
         response = client.get(url=self.url)
 
         assert response.status_code == 200
@@ -22,28 +21,28 @@ class TestSheet:
 
     @pytest.mark.asyncio
     async def test_list_with_user_permission(
-        self, mock_user_permission, mock_action_repo
+        self, client, mock_user_permission, mock_action_repo
     ):
         response = client.get(url=self.url)
 
         assert response.status_code == 403
 
     @pytest.mark.asyncio
-    async def test_create_ok(self, mock_admin_permission, mock_action_repo):
+    async def test_create_ok(self, client, mock_admin_permission, mock_action_repo):
         response = client.post(url=self.url, json=self.new_action.dump_create())
 
         assert response.status_code == 201
 
     @pytest.mark.asyncio
     async def test_create_with_user_permission(
-        self, mock_user_permission, mock_action_repo
+        self, client, mock_user_permission, mock_action_repo
     ):
         response = client.post(url=self.url, json=self.new_action.dump_create())
 
         assert response.status_code == 403
 
     @pytest.mark.asyncio
-    async def test_retrieve_ok(self, mock_user_permission, mock_action_repo):
+    async def test_retrieve_ok(self, client, mock_user_permission, mock_action_repo):
         response = client.get(
             url=f"{self.url}/{self.fake.pyint()}",
         )
@@ -52,7 +51,7 @@ class TestSheet:
         assert isinstance(response.json(), dict)
 
     @pytest.mark.asyncio
-    async def test_update_ok(self, mock_admin_permission, mock_action_repo):
+    async def test_update_ok(self, client, mock_admin_permission, mock_action_repo):
         response = client.put(
             url=f"{self.url}/{self.fake.pyint()}", json=self.new_action.dump_create()
         )
@@ -61,7 +60,7 @@ class TestSheet:
 
     @pytest.mark.asyncio
     async def test_update_with_user_permission(
-        self, mock_user_permission, mock_action_repo
+        self, client, mock_user_permission, mock_action_repo
     ):
         response = client.put(
             url=f"{self.url}/{self.fake.pyint()}", json=self.new_action.dump_create()
@@ -70,7 +69,7 @@ class TestSheet:
         assert response.status_code == 403
 
     @pytest.mark.asyncio
-    async def test_delete_ok(self, mock_admin_permission, mock_action_repo):
+    async def test_delete_ok(self, client, mock_admin_permission, mock_action_repo):
         response = client.delete(
             url=f"{self.url}/{self.fake.pyint()}",
         )
@@ -79,7 +78,7 @@ class TestSheet:
 
     @pytest.mark.asyncio
     async def test_delete_with_user_permission(
-        self, mock_user_permission, mock_action_repo
+        self, client, mock_user_permission, mock_action_repo
     ):
         response = client.delete(
             url=f"{self.url}/{self.fake.pyint()}",

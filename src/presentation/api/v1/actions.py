@@ -1,3 +1,4 @@
+from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 from starlette.status import (
@@ -9,7 +10,7 @@ from starlette.status import (
     HTTP_503_SERVICE_UNAVAILABLE,
 )
 
-from application.use_cases.actions import ActionUseCase
+from application.dependencies import Container
 from domain.entities.actions import ActionCreate, ActionRetrieve
 from domain.permissions.users import IsAdmin
 
@@ -26,8 +27,12 @@ router = APIRouter()
         HTTP_403_FORBIDDEN: {},
     },
 )
-async def get_all_actions(permission=Depends(IsAdmin())):
-    return await ActionUseCase().get_all()
+@inject
+async def get_all_actions(
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
+):
+    return await action_use_case.get_all()
 
 
 @router.post(
@@ -39,10 +44,14 @@ async def get_all_actions(permission=Depends(IsAdmin())):
         HTTP_403_FORBIDDEN: {},
     },
 )
+@inject
 async def create_action(
-    request: Request, new_action: ActionCreate, permission=Depends(IsAdmin())
+    request: Request,
+    new_action: ActionCreate,
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
 ):
-    await ActionUseCase().create(new_action.model_dump(), request.state.user)
+    await action_use_case.create(new_action.model_dump(), request.state.user)
 
 
 @router.get(
@@ -54,8 +63,11 @@ async def create_action(
         HTTP_503_SERVICE_UNAVAILABLE: {},
     },
 )
-async def get_action_by_id(item_id: str):
-    return await ActionUseCase().get_by_id(item_id)
+@inject
+async def get_action_by_id(
+    item_id: str, action_use_case=Depends(Provide[Container.action_use_case])
+):
+    return await action_use_case.get_by_id(item_id)
 
 
 @router.put(
@@ -67,10 +79,14 @@ async def get_action_by_id(item_id: str):
         HTTP_403_FORBIDDEN: {},
     },
 )
+@inject
 async def update_action_by_id(
-    item_id: str, updated_action: ActionCreate, permission=Depends(IsAdmin())
+    item_id: str,
+    updated_action: ActionCreate,
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
 ):
-    await ActionUseCase().update_by_id(item_id, updated_action.model_dump())
+    await action_use_case.update_by_id(item_id, updated_action.model_dump())
 
 
 @router.delete(
@@ -82,5 +98,10 @@ async def update_action_by_id(
         HTTP_403_FORBIDDEN: {},
     },
 )
-async def delete_action_by_id(item_id: str, permission=Depends(IsAdmin())):
-    return await ActionUseCase().delete_by_id(item_id)
+@inject
+async def delete_action_by_id(
+    item_id: str,
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
+):
+    return await action_use_case.delete_by_id(item_id)

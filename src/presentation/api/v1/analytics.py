@@ -1,3 +1,4 @@
+from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 from starlette.status import (
     HTTP_200_OK,
@@ -6,7 +7,7 @@ from starlette.status import (
     HTTP_503_SERVICE_UNAVAILABLE,
 )
 
-from application.use_cases.analytics import AnalyticsUseCase
+from application.dependencies import Container
 from domain.entities.analytics import AnalyticsRetrieve
 from domain.permissions.users import IsAdminOrIsOwner
 from domain.utils.action_types import ActionType
@@ -25,12 +26,16 @@ router = APIRouter()
         HTTP_403_FORBIDDEN: {},
     },
 )
+@inject
 async def get_all_user_actions(
-    user_id: int, period: Period, permission=Depends(IsAdminOrIsOwner())
+    user_id: int,
+    period: Period,
+    permission=Depends(IsAdminOrIsOwner()),
+    analytics_use_case=Depends(Provide[Container.analytics_use_case]),
 ):
     await permission.check_object_permission(user_id)
 
-    return await AnalyticsUseCase().get_all_actions(user_id, period)
+    return await analytics_use_case.get_all_actions(user_id, period)
 
 
 @router.get(
@@ -43,17 +48,19 @@ async def get_all_user_actions(
         HTTP_403_FORBIDDEN: {},
     },
 )
+@inject
 async def get_action_user_tasks(
     user_id: int,
     period: Period,
     action_type: ActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
+    analytics_use_case=Depends(Provide[Container.analytics_use_case]),
 ):
     await permission.check_object_permission(user_id)
 
     if action_type is None:
-        return await AnalyticsUseCase().get_tasks(user_id, period)
-    return await AnalyticsUseCase().get_action_tasks(user_id, action_type, period)
+        return await analytics_use_case.get_tasks(user_id, period)
+    return await analytics_use_case.get_action_tasks(user_id, action_type, period)
 
 
 @router.get(
@@ -66,14 +73,16 @@ async def get_action_user_tasks(
         HTTP_403_FORBIDDEN: {},
     },
 )
+@inject
 async def get_all_user_sheets(
     user_id: int,
     period: Period,
     action_type: ActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
+    analytics_use_case=Depends(Provide[Container.analytics_use_case]),
 ):
     await permission.check_object_permission(user_id)
 
     if action_type is None:
-        return await AnalyticsUseCase().get_sheets(user_id, period)
-    return await AnalyticsUseCase().get_action_sheets(user_id, action_type, period)
+        return await analytics_use_case.get_sheets(user_id, period)
+    return await analytics_use_case.get_action_sheets(user_id, action_type, period)

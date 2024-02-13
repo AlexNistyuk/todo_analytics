@@ -6,8 +6,13 @@ from domain.utils.roles import UserRole
 from main import app
 from tests.factories import ActionFactory, UserFactory
 
-client = TestClient(app=app)
 fake = faker.Faker()
+
+
+@pytest.fixture()
+def client(mock_db_manager):
+    with TestClient(app=app) as client:
+        yield client
 
 
 def mock_user(user, mocker):

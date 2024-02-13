@@ -6,11 +6,12 @@ from boto3.dynamodb.conditions import Attr
 from domain.exceptions.actions import ActionRetrieveError
 from domain.utils.action_types import ActionType
 from domain.utils.period import Period, days_period_map
-from infrastructure.repositories.actions import ActionRepository
+from infrastructure.repositories.interfaces import IRepository
 
 
 class AnalyticsUseCase:
-    repository = ActionRepository()
+    def __init__(self, action_repository: IRepository):
+        self.repository = action_repository
 
     @staticmethod
     def __get_date(period: Period) -> int:

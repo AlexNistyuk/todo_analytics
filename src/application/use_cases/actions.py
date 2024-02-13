@@ -11,11 +11,12 @@ from domain.exceptions.actions import (
     ActionRetrieveError,
     ActionUpdateError,
 )
-from infrastructure.repositories.actions import ActionRepository
+from infrastructure.repositories.interfaces import IRepository
 
 
 class ActionUseCase(IUseCase):
-    repository = ActionRepository()
+    def __init__(self, action_repository: IRepository):
+        self.repository = action_repository
 
     async def create(self, data: dict, user=None) -> None:
         data["id"] = str(uuid.uuid4())
