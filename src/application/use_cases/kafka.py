@@ -1,4 +1,5 @@
 import json
+import logging
 
 from pydantic import ValidationError
 
@@ -6,6 +7,8 @@ from application.use_cases.interfaces import IUseCase
 from domain.entities.kafka import KafkaSheet, KafkaTask
 from domain.enums.base import ActionAt
 from infrastructure.managers.kafka import KafkaConsumerManager
+
+logger = logging.Logger(__name__)
 
 
 class KafkaConsumerUseCase(KafkaConsumerManager):
@@ -28,11 +31,19 @@ class KafkaConsumerUseCase(KafkaConsumerManager):
 
         model = self.validation_model_map.get(action_at)
         if not model:
+            logger.warning(
+                f"Validation model does not exist for action type. Message: {message}"
+            )
+
             return
 
         try:
             data = model(**message).model_dump()
-        except ValidationError:
+        except ValidationError as exc:
+            logger.warning(
+                f"Validation error. Validation model: {model}. Message: {message}. Error: {exc}"
+            )
+
             return
 
         await self.action_use_case.create(data=data)
