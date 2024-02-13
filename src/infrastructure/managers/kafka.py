@@ -7,6 +7,8 @@ settings = get_settings()
 
 
 class KafkaConsumerManager(IManager):
+    consumer: AIOKafkaConsumer
+
     @classmethod
     async def connect(cls):
         cls.consumer = AIOKafkaConsumer(
