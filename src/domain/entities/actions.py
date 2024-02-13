@@ -1,16 +1,33 @@
 from pydantic import BaseModel
 
-from domain.utils.action_at import ActionAt
-from domain.utils.action_types import ActionType
+from domain.enums.base import ActionAt
+from domain.enums.sheets import SheetActionType
+from domain.enums.tasks import TaskActionType
 
 
-class ActionCreate(BaseModel):
-    action_at: ActionAt
+class ActionBase(BaseModel):
     name: str
-    action_type: ActionType
 
 
-class ActionRetrieve(ActionCreate):
+class ActionCreateTask(ActionBase):
+    action_at: ActionAt = ActionAt.task.value
+    action_type: TaskActionType
+
+    class Config:
+        use_enum_values = True
+
+
+class ActionCreateSheet(ActionBase):
+    action_at: ActionAt = ActionAt.sheet.value
+    action_type: SheetActionType
+
+    class Config:
+        use_enum_values = True
+
+
+class ActionRetrieve(ActionBase):
     id: str
     user_id: int
     created_at: int
+    action_at: ActionAt
+    action_type: TaskActionType | SheetActionType

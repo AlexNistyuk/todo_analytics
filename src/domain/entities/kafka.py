@@ -1,11 +1,23 @@
 from pydantic import BaseModel
 
-from domain.utils.action_at import ActionAt
-from domain.utils.action_types import ActionType
+from domain.enums.base import ActionAt
+from domain.enums.sheets import SheetActionType
+from domain.enums.tasks import TaskActionType
 
 
-class Kafka(BaseModel):
-    action_at: ActionAt
+class KafkaBase(BaseModel):
     name: str
-    action_type: ActionType
     user_id: int
+
+    class Config:
+        use_enum_values = True
+
+
+class KafkaTask(KafkaBase):
+    action_at: str = ActionAt.task.value
+    action_type: TaskActionType
+
+
+class KafkaSheet(KafkaBase):
+    action_at: str = ActionAt.sheet.value
+    action_type: SheetActionType

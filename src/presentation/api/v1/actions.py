@@ -11,7 +11,7 @@ from starlette.status import (
 )
 
 from application.dependencies import Container
-from domain.entities.actions import ActionCreate, ActionRetrieve
+from domain.entities.actions import ActionCreateSheet, ActionCreateTask, ActionRetrieve
 from domain.permissions.users import IsAdmin
 
 router = APIRouter()
@@ -36,7 +36,7 @@ async def get_all_actions(
 
 
 @router.post(
-    "/",
+    "/tasks",
     status_code=HTTP_201_CREATED,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -45,9 +45,28 @@ async def get_all_actions(
     },
 )
 @inject
-async def create_action(
+async def create_task_action(
     request: Request,
-    new_action: ActionCreate,
+    new_action: ActionCreateTask,
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
+):
+    await action_use_case.create(new_action.model_dump(), request.state.user)
+
+
+@router.post(
+    "/sheets",
+    status_code=HTTP_201_CREATED,
+    responses={
+        HTTP_400_BAD_REQUEST: {},
+        HTTP_503_SERVICE_UNAVAILABLE: {},
+        HTTP_403_FORBIDDEN: {},
+    },
+)
+@inject
+async def create_sheet_action(
+    request: Request,
+    new_action: ActionCreateSheet,
     permission=Depends(IsAdmin()),
     action_use_case=Depends(Provide[Container.action_use_case]),
 ):
@@ -71,7 +90,7 @@ async def get_action_by_id(
 
 
 @router.put(
-    "/{item_id}",
+    "/tasks/{item_id}",
     status_code=HTTP_204_NO_CONTENT,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -80,9 +99,28 @@ async def get_action_by_id(
     },
 )
 @inject
-async def update_action_by_id(
+async def update_task_action_by_id(
     item_id: str,
-    updated_action: ActionCreate,
+    updated_action: ActionCreateTask,
+    permission=Depends(IsAdmin()),
+    action_use_case=Depends(Provide[Container.action_use_case]),
+):
+    await action_use_case.update_by_id(item_id, updated_action.model_dump())
+
+
+@router.put(
+    "/sheets/{item_id}",
+    status_code=HTTP_204_NO_CONTENT,
+    responses={
+        HTTP_400_BAD_REQUEST: {},
+        HTTP_503_SERVICE_UNAVAILABLE: {},
+        HTTP_403_FORBIDDEN: {},
+    },
+)
+@inject
+async def update_sheet_action_by_id(
+    item_id: str,
+    updated_action: ActionCreateSheet,
     permission=Depends(IsAdmin()),
     action_use_case=Depends(Provide[Container.action_use_case]),
 ):

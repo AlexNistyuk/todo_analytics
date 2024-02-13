@@ -11,18 +11,18 @@ class ActionRepository(DatabaseManager, IRepository):
         table = await self.client.Table(self.table)
         await table.put_item(Item=data)
 
-    async def get_all(self):
+    async def get_all(self) -> list[dict]:
         table = await self.client.Table(self.table)
 
         return await table.scan()
 
-    async def get_by_id(self, item_id: str):
+    async def get_by_id(self, item_id: str) -> dict:
         table = await self.client.Table(self.table)
         query = Key("id").eq(item_id)
 
         return await table.query(KeyConditionExpression=query)
 
-    async def get_by_filters(self, filters):
+    async def get_by_filters(self, filters) -> dict:
         table = await self.client.Table(self.table)
 
         return await table.scan(FilterExpression=filters)

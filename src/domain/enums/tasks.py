@@ -1,7 +1,7 @@
 import enum
 
 
-class ActionType(enum.Enum):
+class TaskActionType(enum.Enum):
     create = "create"
     retrieve = "retrieve"
     done = "done"

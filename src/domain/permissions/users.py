@@ -1,5 +1,5 @@
+from domain.enums.users import UserRole
 from domain.permissions.base import BasePermission
-from domain.utils.roles import UserRole
 from infrastructure.config import get_settings
 
 settings = get_settings()

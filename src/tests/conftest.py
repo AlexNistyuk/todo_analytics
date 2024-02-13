@@ -2,7 +2,8 @@ import faker
 import pytest
 from starlette.testclient import TestClient
 
-from domain.utils.roles import UserRole
+from domain.enums.base import ActionAt
+from domain.enums.users import UserRole
 from main import app
 from tests.factories import ActionFactory, UserFactory
 
@@ -36,7 +37,7 @@ def mock_user_permission(mocker):
 @pytest.fixture()
 def mock_action_repo(mocker):
     repo_path = "infrastructure.repositories.actions.ActionRepository"
-    action = {"Items": [ActionFactory().dump()], "Count": 1}
+    action = {"Items": [ActionFactory(ActionAt.task.value).dump()], "Count": 1}
 
     mocker.patch(f"{repo_path}.create", return_value=None)
     mocker.patch(f"{repo_path}.update_by_id", return_value=None)

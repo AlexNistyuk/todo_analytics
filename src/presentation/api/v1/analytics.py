@@ -9,9 +9,10 @@ from starlette.status import (
 
 from application.dependencies import Container
 from domain.entities.analytics import AnalyticsRetrieve
+from domain.enums.base import Period
+from domain.enums.sheets import SheetActionType
+from domain.enums.tasks import TaskActionType
 from domain.permissions.users import IsAdminOrIsOwner
-from domain.utils.action_types import ActionType
-from domain.utils.period import Period
 
 router = APIRouter()
 
@@ -52,14 +53,14 @@ async def get_all_user_actions(
 async def get_action_user_tasks(
     user_id: int,
     period: Period,
-    action_type: ActionType = None,
+    action_type: TaskActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
     analytics_use_case=Depends(Provide[Container.analytics_use_case]),
 ):
     await permission.check_object_permission(user_id)
 
     if action_type is None:
-        return await analytics_use_case.get_tasks(user_id, period)
+        return await analytics_use_case.get_all_tasks(user_id, period)
     return await analytics_use_case.get_action_tasks(user_id, action_type, period)
 
 
@@ -77,12 +78,12 @@ async def get_action_user_tasks(
 async def get_all_user_sheets(
     user_id: int,
     period: Period,
-    action_type: ActionType = None,
+    action_type: SheetActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
     analytics_use_case=Depends(Provide[Container.analytics_use_case]),
 ):
     await permission.check_object_permission(user_id)
 
     if action_type is None:
-        return await analytics_use_case.get_sheets(user_id, period)
+        return await analytics_use_case.get_all_sheets(user_id, period)
     return await analytics_use_case.get_action_sheets(user_id, action_type, period)

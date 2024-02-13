@@ -1,8 +1,9 @@
 import faker
 import pytest
 
-from domain.utils.action_types import ActionType
-from domain.utils.period import Period
+from domain.enums.base import Period
+from domain.enums.sheets import SheetActionType
+from domain.enums.tasks import TaskActionType
 
 
 class TestSheet:
@@ -38,7 +39,10 @@ class TestSheet:
     ):
         response = client.get(
             url=f"{self.url}/{self.fake.pyint()}/tasks",
-            params={"period": Period.week.value, "action_type": ActionType.done.value},
+            params={
+                "period": Period.week.value,
+                "action_type": TaskActionType.done.value,
+            },
         )
 
         assert response.status_code == 200
@@ -50,7 +54,10 @@ class TestSheet:
     ):
         response = client.get(
             url=f"{self.url}/{self.fake.pyint()}/tasks",
-            params={"period": Period.week.value, "action_type": ActionType.done.value},
+            params={
+                "period": Period.week.value,
+                "action_type": TaskActionType.done.value,
+            },
         )
 
         assert response.status_code == 403
@@ -61,7 +68,10 @@ class TestSheet:
     ):
         response = client.get(
             url=f"{self.url}/{self.fake.pyint()}/sheets",
-            params={"period": Period.week.value, "action_type": ActionType.done.value},
+            params={
+                "period": Period.week.value,
+                "action_type": SheetActionType.retrieve.value,
+            },
         )
 
         assert response.status_code == 200
@@ -73,7 +83,10 @@ class TestSheet:
     ):
         response = client.get(
             url=f"{self.url}/{self.fake.pyint()}/sheets",
-            params={"period": Period.week.value, "action_type": ActionType.done.value},
+            params={
+                "period": Period.week.value,
+                "action_type": SheetActionType.retrieve.value,
+            },
         )
 
         assert response.status_code == 403

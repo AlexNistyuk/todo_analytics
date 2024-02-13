@@ -15,7 +15,7 @@ from infrastructure.repositories.interfaces import IRepository
 
 
 class ActionUseCase(IUseCase):
-    def __init__(self, action_repository: IRepository):
+    def __init__(self, action_repository: IRepository) -> None:
         self.repository = action_repository
 
     async def create(self, data: dict, user=None) -> None:
@@ -25,8 +25,6 @@ class ActionUseCase(IUseCase):
             data["user_id"] = user.get("id")
 
         data["created_at"] = int(datetime.datetime.utcnow().timestamp())
-        data["action_at"] = data["action_at"].value
-        data["action_type"] = data["action_type"].value
 
         try:
             await self.repository.create(data)

@@ -2,7 +2,9 @@ import datetime
 
 import faker
 
-from domain.entities.actions import ActionAt, ActionType
+from domain.entities.actions import ActionAt
+from domain.enums.sheets import SheetActionType
+from domain.enums.tasks import TaskActionType
 
 
 class UserFactory:
@@ -21,20 +23,26 @@ class UserFactory:
 
 
 class ActionFactory:
-    def __init__(self):
+    action_type_map = {
+        ActionAt.sheet.value: SheetActionType.retrieve.value,
+        ActionAt.task.value: TaskActionType.retrieve.value,
+    }
+
+    def __init__(self, action_at):
         self.fake = faker.Faker()
+        self.action_at = action_at
+        self.action_type = self.action_type_map.get(action_at)
 
     def dump_create(self):
         return {
-            "action_at": self.action_at.value,
-            "action_type": self.action_type.value,
+            "action_type": self.action_type,
             "name": self.name,
         }
 
     def dump(self):
         return {
-            "action_at": self.action_at.value,
-            "action_type": self.action_type.value,
+            "action_at": self.action_at,
+            "action_type": self.action_type,
             "name": self.name,
             "id": self.id,
             "user_id": self.user_id,
@@ -53,13 +61,13 @@ class ActionFactory:
     def name(self):
         return self.fake.user_name()
 
-    @property
-    def action_at(self):
-        return ActionAt.sheet
+    # @property
+    # def action_at(self):
+    #     return ActionAt.sheet.value
 
-    @property
-    def action_type(self):
-        return ActionType.done
+    # @property
+    # def action_type(self):
+    #     return SheetActionType.retrieve.value
 
     @property
     def created_at(self):

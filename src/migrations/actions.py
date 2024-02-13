@@ -1,7 +1,7 @@
 async def create_actions_table(dynamodb):
     table_name = "actions"
     key_schema = [
-        {"AttributeName": "id", "KeyType": "HASH"},  # Partition key
+        {"AttributeName": "id", "KeyType": "HASH"},
     ]
     attribute_definitions = [
         {"AttributeName": "id", "AttributeType": "S"},
