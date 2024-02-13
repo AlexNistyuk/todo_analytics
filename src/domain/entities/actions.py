@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from domain.enums.base import ActionAt
 from domain.enums.sheets import SheetActionType
@@ -10,19 +10,29 @@ class ActionBase(BaseModel):
 
 
 class ActionCreateTask(ActionBase):
-    action_at: ActionAt = ActionAt.task.value
+    action_at: str = ActionAt.task.value
     action_type: TaskActionType
 
     class Config:
         use_enum_values = True
 
+    @field_validator("action_at", mode="after")
+    @staticmethod
+    def validate_action_at(value) -> str:
+        return ActionAt.task.value
+
 
 class ActionCreateSheet(ActionBase):
-    action_at: ActionAt = ActionAt.sheet.value
+    action_at: str = ActionAt.sheet.value
     action_type: SheetActionType
 
     class Config:
         use_enum_values = True
+
+    @field_validator("action_at", mode="after")
+    @staticmethod
+    def validate_action_at(value) -> str:
+        return ActionAt.sheet.value
 
 
 class ActionRetrieve(ActionBase):
