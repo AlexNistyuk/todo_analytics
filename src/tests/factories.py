@@ -61,14 +61,6 @@ class ActionFactory:
     def name(self):
         return self.fake.user_name()
 
-    # @property
-    # def action_at(self):
-    #     return ActionAt.sheet.value
-
-    # @property
-    # def action_type(self):
-    #     return SheetActionType.retrieve.value
-
     @property
     def created_at(self):
         return int(datetime.datetime.utcnow().timestamp())
