@@ -39,8 +39,8 @@ class AnalyticsUseCase:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_at").eq(ActionAt.task.value)
+                & Attr("user_id").eq(user_id)
+                & Attr("action_at").eq(ActionAt.task.value)
             )
 
             result = await self.repository.get_by_filters(filters)
@@ -56,9 +56,9 @@ class AnalyticsUseCase:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq(action_type.value)
-                and Attr("action_at").eq(ActionAt.task.value)
+                & Attr("user_id").eq(user_id)
+                & Attr("action_type").eq(action_type.value)
+                & Attr("action_at").eq(ActionAt.task.value)
             )
 
             result = await self.repository.get_by_filters(filters)
@@ -72,8 +72,8 @@ class AnalyticsUseCase:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_at").eq(ActionAt.sheet.value)
+                & Attr("user_id").eq(user_id)
+                & Attr("action_at").eq(ActionAt.sheet.value)
             )
 
             result = await self.repository.get_by_filters(filters)
@@ -89,9 +89,9 @@ class AnalyticsUseCase:
             date = self.__get_date(period)
             filters = (
                 Attr("created_at").gte(date)
-                and Attr("user_id").eq(user_id)
-                and Attr("action_type").eq(action_type.value)
-                and Attr("action_at").eq(ActionAt.sheet.value)
+                & Attr("user_id").eq(user_id)
+                & Attr("action_type").eq(action_type.value)
+                & Attr("action_at").eq(ActionAt.sheet.value)
             )
 
             result = await self.repository.get_by_filters(filters)
