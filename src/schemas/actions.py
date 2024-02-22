@@ -1,3 +1,8 @@
+import asyncio
+
+from infrastructure.managers.database import DatabaseManager
+
+
 async def create_actions_table(dynamodb):
     table_name = "actions"
     key_schema = [
@@ -18,3 +23,12 @@ async def create_actions_table(dynamodb):
         )
     except Exception:
         ...
+
+
+async def main():
+    await DatabaseManager.connect()
+    await create_actions_table(DatabaseManager.client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

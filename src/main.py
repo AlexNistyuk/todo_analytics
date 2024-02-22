@@ -5,14 +5,12 @@ from fastapi import FastAPI
 from application.dependencies import Container
 from infrastructure.managers.database import DatabaseManager
 from infrastructure.middlewares.auth_middleware.init import init_auth_middleware
-from migrations.actions import create_actions_table
 from presentation.routers import router as api_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await DatabaseManager.connect()
-    await create_actions_table(DatabaseManager.client)
 
     container = Container()
     container.wire(
