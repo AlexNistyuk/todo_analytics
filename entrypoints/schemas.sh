@@ -2,4 +2,4 @@
 
 cd src
 
-python schemas/actions.py
+python schemas.py
