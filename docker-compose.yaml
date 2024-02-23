@@ -23,6 +23,9 @@ services:
     environment:
       - SERVICES=dynamodb
       - DEBUG=0
+      - PERSISTENCE=1
+    volumes:
+      - ./dynamodb_data:/var/lib/localstack/state
 
   nginx_app:
     image: nginx:latest

@@ -9,12 +9,9 @@ async def create_actions_table(dynamodb):
 
     provisioned_throughput = {"ReadCapacityUnits": 10, "WriteCapacityUnits": 10}
 
-    try:
-        await dynamodb.create_table(
-            TableName=table_name,
-            KeySchema=key_schema,
-            AttributeDefinitions=attribute_definitions,
-            ProvisionedThroughput=provisioned_throughput,
-        )
-    except Exception:
-        ...
+    await dynamodb.create_table(
+        TableName=table_name,
+        KeySchema=key_schema,
+        AttributeDefinitions=attribute_definitions,
+        ProvisionedThroughput=provisioned_throughput,
+    )
