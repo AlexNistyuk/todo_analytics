@@ -16,9 +16,7 @@ class TestSheet:
     async def test_list_all_actions_ok(
         self, client, mock_admin_permission, mock_action_repo
     ):
-        response = client.get(
-            url=f"{self.url}{self.fake.pyint()}/", params={"period": Period.week.value}
-        )
+        response = client.get(url=f"{self.url}", params={"period": Period.week.value})
 
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
@@ -27,9 +25,7 @@ class TestSheet:
     async def test_list_all_actions_with_user_permission(
         self, client, mock_user_permission, mock_action_repo
     ):
-        response = client.get(
-            url=f"{self.url}{self.fake.pyint()}/", params={"period": Period.week.value}
-        )
+        response = client.get(url=f"{self.url}", params={"period": Period.week.value})
 
         assert response.status_code == 403
 
@@ -38,7 +34,7 @@ class TestSheet:
         self, client, mock_admin_permission, mock_action_repo
     ):
         response = client.get(
-            url=f"{self.url}/{self.fake.pyint()}/tasks",
+            url=f"{self.url}tasks/",
             params={
                 "period": Period.week.value,
                 "action_type": TaskActionType.done.value,
