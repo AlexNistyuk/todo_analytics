@@ -36,7 +36,7 @@ async def get_all_actions(
 
 
 @router.post(
-    "/tasks",
+    "/tasks/",
     status_code=HTTP_201_CREATED,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -55,7 +55,7 @@ async def create_task_action(
 
 
 @router.post(
-    "/sheets",
+    "/sheets/",
     status_code=HTTP_201_CREATED,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -74,7 +74,7 @@ async def create_sheet_action(
 
 
 @router.get(
-    "/{item_id}",
+    "/{item_id}/",
     response_model=ActionRetrieve,
     status_code=HTTP_200_OK,
     responses={
@@ -90,7 +90,7 @@ async def get_action_by_id(
 
 
 @router.put(
-    "/tasks/{item_id}",
+    "/tasks/{item_id}/",
     status_code=HTTP_204_NO_CONTENT,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -109,7 +109,7 @@ async def update_task_action_by_id(
 
 
 @router.put(
-    "/sheets/{item_id}",
+    "/sheets/{item_id}/",
     status_code=HTTP_204_NO_CONTENT,
     responses={
         HTTP_400_BAD_REQUEST: {},
@@ -128,7 +128,7 @@ async def update_sheet_action_by_id(
 
 
 @router.delete(
-    "/{item_id}",
+    "/{item_id}/",
     status_code=HTTP_204_NO_CONTENT,
     responses={
         HTTP_400_BAD_REQUEST: {},
