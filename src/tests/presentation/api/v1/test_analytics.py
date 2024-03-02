@@ -25,7 +25,10 @@ class TestSheet:
     async def test_list_all_actions_with_user_permission(
         self, client, mock_user_permission, mock_action_repo
     ):
-        response = client.get(url=f"{self.url}", params={"period": Period.week.value})
+        response = client.get(
+            url=f"{self.url}",
+            params={"period": Period.week.value, "user_id": self.fake.pyint()},
+        )
 
         assert response.status_code == 403
 
@@ -53,6 +56,7 @@ class TestSheet:
             params={
                 "period": Period.week.value,
                 "action_type": TaskActionType.done.value,
+                "user_id": self.fake.pyint(),
             },
         )
 
@@ -82,6 +86,7 @@ class TestSheet:
             params={
                 "period": Period.week.value,
                 "action_type": SheetActionType.retrieve.value,
+                "user_id": self.fake.pyint(),
             },
         )
 

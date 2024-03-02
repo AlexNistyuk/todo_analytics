@@ -34,7 +34,7 @@ async def get_all_user_actions(
     period: Period,
     permission=Depends(IsAdminOrIsOwner()),
     analytics_use_case=Depends(Provide[Container.analytics_use_case]),
-    user_id: int = None,
+    user_id: int | None = None,
 ):
     if user_id is None:
         user_id = request.state.user.get("id")
@@ -61,7 +61,7 @@ async def get_action_user_tasks(
     action_type: TaskActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
     analytics_use_case=Depends(Provide[Container.analytics_use_case]),
-    user_id: int = None,
+    user_id: int | None = None,
 ):
     if user_id is None:
         user_id = request.state.user.get("id")
@@ -90,7 +90,7 @@ async def get_all_user_sheets(
     action_type: SheetActionType = None,
     permission=Depends(IsAdminOrIsOwner()),
     analytics_use_case=Depends(Provide[Container.analytics_use_case]),
-    user_id: int = None,
+    user_id: int | None = None,
 ):
     if user_id is None:
         user_id = request.state.user.get("id")
