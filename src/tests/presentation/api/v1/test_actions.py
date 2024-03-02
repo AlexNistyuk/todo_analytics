@@ -6,7 +6,7 @@ from tests.factories import ActionFactory
 
 
 class TestSheet:
-    url = "api/v1/actions"
+    url = "api/v1/actions/"
 
     def setup_method(self):
         self.new_task_action = ActionFactory(ActionAt.task.value)
@@ -34,7 +34,7 @@ class TestSheet:
         self, client, mock_admin_permission, mock_action_repo
     ):
         response = client.post(
-            url=f"{self.url}/tasks", json=self.new_task_action.dump_create()
+            url=f"{self.url}tasks/", json=self.new_task_action.dump_create()
         )
 
         assert response.status_code == 201
@@ -44,7 +44,7 @@ class TestSheet:
         self, client, mock_user_permission, mock_action_repo
     ):
         response = client.post(
-            url=f"{self.url}/tasks", json=self.new_task_action.dump_create()
+            url=f"{self.url}tasks/", json=self.new_task_action.dump_create()
         )
 
         assert response.status_code == 403
@@ -54,7 +54,7 @@ class TestSheet:
         self, client, mock_admin_permission, mock_action_repo
     ):
         response = client.post(
-            url=f"{self.url}/sheets", json=self.new_sheet_action.dump_create()
+            url=f"{self.url}sheets/", json=self.new_sheet_action.dump_create()
         )
 
         assert response.status_code == 201
@@ -64,7 +64,7 @@ class TestSheet:
         self, client, mock_user_permission, mock_action_repo
     ):
         response = client.post(
-            url=f"{self.url}/sheets", json=self.new_sheet_action.dump_create()
+            url=f"{self.url}sheets/", json=self.new_sheet_action.dump_create()
         )
 
         assert response.status_code == 403
@@ -72,7 +72,7 @@ class TestSheet:
     @pytest.mark.asyncio
     async def test_retrieve_ok(self, client, mock_user_permission, mock_action_repo):
         response = client.get(
-            url=f"{self.url}/{self.fake.pyint()}",
+            url=f"{self.url}{self.fake.pyint()}/",
         )
 
         assert response.status_code == 200
@@ -83,7 +83,7 @@ class TestSheet:
         self, client, mock_admin_permission, mock_action_repo
     ):
         response = client.put(
-            url=f"{self.url}/tasks/{self.fake.pyint()}",
+            url=f"{self.url}tasks/{self.fake.pyint()}/",
             json=self.new_task_action.dump_create(),
         )
 
@@ -94,7 +94,7 @@ class TestSheet:
         self, client, mock_user_permission, mock_action_repo
     ):
         response = client.put(
-            url=f"{self.url}/tasks/{self.fake.pyint()}",
+            url=f"{self.url}tasks/{self.fake.pyint()}/",
             json=self.new_task_action.dump_create(),
         )
 
@@ -105,7 +105,7 @@ class TestSheet:
         self, client, mock_admin_permission, mock_action_repo
     ):
         response = client.put(
-            url=f"{self.url}/sheets/{self.fake.pyint()}",
+            url=f"{self.url}sheets/{self.fake.pyint()}/",
             json=self.new_sheet_action.dump_create(),
         )
 
@@ -116,7 +116,7 @@ class TestSheet:
         self, client, mock_user_permission, mock_action_repo
     ):
         response = client.put(
-            url=f"{self.url}/sheets/{self.fake.pyint()}",
+            url=f"{self.url}sheets/{self.fake.pyint()}/",
             json=self.new_sheet_action.dump_create(),
         )
 
@@ -125,7 +125,7 @@ class TestSheet:
     @pytest.mark.asyncio
     async def test_delete_ok(self, client, mock_admin_permission, mock_action_repo):
         response = client.delete(
-            url=f"{self.url}/{self.fake.pyint()}",
+            url=f"{self.url}{self.fake.pyint()}/",
         )
 
         assert response.status_code == 204
@@ -135,7 +135,7 @@ class TestSheet:
         self, client, mock_user_permission, mock_action_repo
     ):
         response = client.delete(
-            url=f"{self.url}/{self.fake.pyint()}",
+            url=f"{self.url}{self.fake.pyint()}/",
         )
 
         assert response.status_code == 403
