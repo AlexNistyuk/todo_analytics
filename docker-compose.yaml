@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  fastapi_todo_analytics_app:
+    build: .
+    container_name: ${WEB_HOST}
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    env_file:
+      - .env
+    entrypoint:
+      - ./entrypoints/fastapi.sh
+
+  kafka_consumer_app:
+    build: .
+    entrypoint:
+      - ./entrypoints/kafka-consumer.sh
+
+  localstack_app:
+    image: localstack/localstack
+    container_name: ${DB_HOST}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      - SERVICES=dynamodb
+      - DEBUG=0
+      - PERSISTENCE=1
+    volumes:
+      - ./dynamodb_data:/var/lib/localstack/state
+
+  nginx_app:
+    image: nginx:latest
+    ports:
+      - ${NGINX_PORT}:${NGINX_LISTEN_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - fastapi_todo_analytics_app
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+
+networks:
+  default:
+    name: ${DEFAULT_NETWORK}
+    external: true
